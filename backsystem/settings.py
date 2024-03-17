@@ -140,23 +140,25 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
 # Custom user model
 AUTH_USER_MODEL = "userauths.User"
 
-AWS_QUERYSTRING_AUTH = False
-
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME='mangoyi-images'
 
-AWS_STORAGE_BUCKET_NAME = 'mangoyi-images'
+AWS_S3_FILE_OVERWRITE = False
 
-if os.getcwd() == "/app":
-    DEBUG = False
+AWS_DEFAULT_ACL = None
 
-# Whitenoise settings
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
@@ -167,10 +169,6 @@ AWS_LOCATION = 'static'
 STATIC_LOCATION = 'static'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # CSRF Trusted Origins
