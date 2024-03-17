@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     # Third-party apps
     'import_export',
+    'storages',
     # Your custom apps
     'core',
     'userauths',
@@ -141,6 +142,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Custom user model
 AUTH_USER_MODEL = "userauths.User"
+
+AWS_QUERYSTRING_AUTH = False
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+
+AWS_STORAGE_BUCKET_NAME = 'mangoyi-images'
+
+if os.getcwd() == "/app":
+    DEBUG = False
+
+# Whitenoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
