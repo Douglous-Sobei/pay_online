@@ -1,0 +1,29 @@
+[33m99466cd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD^
+[33m6b295b7[m HEAD@{1}: reset: moving to HEAD~1
+[33mfb0317b[m HEAD@{2}: reset: moving to HEAD~1
+[33m9f5eed2[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{3}: reset: moving to HEAD~1
+[33m312acb9[m HEAD@{4}: commit: update
+[33m9f5eed2[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{5}: pull: Fast-forward
+[33mfb0317b[m HEAD@{6}: reset: moving to HEAD~1
+[33m9f5eed2[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{7}: commit: debug
+[33mfb0317b[m HEAD@{8}: commit: Added Google play button file
+[33m6b295b7[m HEAD@{9}: commit: Handled business logic views to render templates and request data from database correctly
+[33m99466cd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m HEAD@{10}: commit: Setrings recognifiguration
+[33maceddc4[m HEAD@{11}: pull: Fast-forward
+[33m2b8f5c2[m HEAD@{12}: commit: readme file
+[33m0e00ebf[m HEAD@{13}: commit: updated
+[33mc72297e[m HEAD@{14}: Branch: renamed refs/heads/main to refs/heads/main
+[33mc72297e[m HEAD@{16}: commit: edit static files
+[33m5835836[m HEAD@{17}: reset: moving to HEAD~1
+[33m97db940[m HEAD@{18}: commit: mmmm
+[33m5835836[m HEAD@{19}: reset: moving to HEAD~1
+[33mdcd0643[m HEAD@{20}: commit: mmmm
+[33m5835836[m HEAD@{21}: commit: collected static files to the aws
+[33m038df88[m HEAD@{22}: reset: moving to HEAD~1
+[33m9ef289b[m HEAD@{23}: reset: moving to HEAD~1
+[33mf87f5f6[m HEAD@{24}: commit: mmm
+[33m9ef289b[m HEAD@{25}: commit: Debug
+[33m038df88[m HEAD@{26}: commit: edit configuration of s3
+[33m2ef196d[m HEAD@{27}: commit: Hosting static and media files
+[33m940e64e[m HEAD@{28}: commit: configuring database url
+[33mafbd2ef[m HEAD@{29}: commit (initial): initial commit
