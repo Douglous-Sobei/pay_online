@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from decimal import Decimal
-from core.models import Transaction
+from core.models import Transaction, Notification
 
 
 @login_required
@@ -33,7 +33,7 @@ def AmountTransfer(request, account_number):
         messages.warning(request, "Account does not exist.")
         return redirect("core:search-account")
     context = {
-        "account": account
+        "account": account,
     }
     return render(request, "transfer/amount-transfer.html", context)
 
@@ -87,10 +87,9 @@ def TransferConfirmation(request, account_number, transaction_id):
     except:
         messages.warning(request, "Transaction does not exist.")
         return redirect("account:account")
-
     context = {
         "account": account,
-        "transaction": transaction,
+        "transaction": transaction
     }
     return render(request, "transfer/transfer-confirmation.html", context)
 
@@ -106,31 +105,44 @@ def TransferProcess(request, account_number, transaction_id):
     reciever_account = account
 
     completed = False
+
     if request.method == "POST":
         pin_number = request.POST.get("pin-number")
-
         print(pin_number)
 
         if pin_number == sender_account.pin_number:
             transaction.status = "completed"
             transaction.save()
 
-            # Remove the amount that i am sending from account balance and update my account
+            # Remove the amount that i am sending from my account balance and update my account
             sender_account.account_balance -= transaction.amount
             sender_account.save()
 
-            # Add the amount that was removed from my account to the person am sending to
-            account.account_balance = transaction.amount
+            # Add the amount that vas removed from my account to the person that i am sending the money too
+            account.account_balance += transaction.amount
             account.save()
 
-            messages.success(request, "Transfer was successful.")
-            return redirect("account:account")
+            # Create Notification Object
+            Notification.objects.create(
+                amount=transaction.amount,
+                user=account.user,
+                notification_type="Credit Alert"
+            )
+
+            Notification.objects.create(
+                user=sender,
+                notification_type="Debit Alert",
+                amount=transaction.amount
+            )
+
+            messages.success(request, "Transfer Successfull.")
+            return redirect("core:transfer-completed", account.account_number, transaction.transaction_id)
         else:
-            messages.warning(request, "Incorrect Pin")
-            return redirect("core:transfer-confirmation", account.account_number, transaction.transaction_id)
+            messages.warning(request, "Incorrect Pin.")
+            return redirect('core:transfer-confirmation', account.account_number, transaction.transaction_id)
     else:
-        messages.warning(request, "An error occured, Try again later")
-        return redirect("account:account")
+        messages.warning(request, "An error occured, Try again later.")
+        return redirect('account:account')
 
 
 def TransferCompleted(request, account_number, transaction_id):
@@ -140,9 +152,8 @@ def TransferCompleted(request, account_number, transaction_id):
     except:
         messages.warning(request, "Transfer does not exist.")
         return redirect("account:account")
-
     context = {
         "account": account,
-        "transaction": transaction,
+        "transaction": transaction
     }
     return render(request, "transfer/transfer-completed.html", context)

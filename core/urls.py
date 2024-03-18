@@ -1,6 +1,7 @@
 from django.urls import path
 from core import views, transfer, transaction, payment_request, credit_card
 
+
 app_name = "core"
 
 urlpatterns = [
@@ -20,15 +21,13 @@ urlpatterns = [
     path("transfer-completed/<account_number>/<transaction_id>/",
          transfer.TransferCompleted, name="transfer-completed"),
 
-    # Transactions
+
+    # transactions
     path("transactions/", transaction.transaction_lists, name="transactions"),
     path("transaction-detail/<transaction_id>/",
          transaction.transaction_detail, name="transaction-detail"),
 
-    path("transaction-detail/<transaction_id>/",
-         transaction.transaction_detail, name="transaction-detail"),
-
-    # Payment requests
+    # Payment Request
     path("request-search-account/", payment_request.SearchUsersRequest,
          name="request-search-account"),
     path("amount-request/<account_number>/",
@@ -42,6 +41,7 @@ urlpatterns = [
     path("amount-request-completed/<account_number>/<transaction_id>/",
          payment_request.RequestCompleted, name="amount-request-completed"),
 
+
     # Request Settlement
     path("settlement-confirmation/<account_number>/<transaction_id>/",
          payment_request.settlement_confirmation, name="settlement-confirmation"),
@@ -50,13 +50,15 @@ urlpatterns = [
     path("settlement-completed/<account_number>/<transaction_id>/",
          payment_request.SettlementCompleted, name="settlement-completed"),
     path("delete-request/<account_number>/<transaction_id>/",
-         payment_request.deletePaymentRequest, name="delete-request"),
+         payment_request.deletepaymentrequest, name="delete-request"),
 
-    # Credit cards
+
+
+    # Credit Card URLS
     path("card/<card_id>/", credit_card.card_detail, name="card-detail"),
     path("fund-credit-card/<card_id>/",
          credit_card.fund_credit_card, name="fund-credit-card"),
-    path("withdraw-fund/<card_id>/",
-         credit_card.withdraw_fund, name="withdraw-fund"),
-    path("delete_card/<card_id>/", credit_card.delete_card, name="delete_card")
+    path("withdraw_fund/<card_id>/",
+         credit_card.withdraw_fund, name="withdraw_fund"),
+    path("delete_card/<card_id>/", credit_card.delete_card, name="delete_card"),
 ]
