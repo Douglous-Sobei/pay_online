@@ -20,13 +20,13 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Debug mode settings
-DEBUG = True
+DEBUG = config("DEBUG",default=False,cast=bool)
 
 # Allowed hosts
 ALLOWED_HOSTS = ["*"]
 
 # Secret key for production (update this with a secure key)
-SECRET_KEY = 'os.environ.get("SECRET_KEY")'
+SECRET_KEY = config("SECRET_KEY")
 
 # Application definition
 INSTALLED_APPS = [
@@ -79,26 +79,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "backsystem.wsgi.application"
 
 # Database settings
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DATABASE_NAME'),
-#         'USER': config('DATABASE_USER'),
-#         'PASSWORD': config('DATABASE_PASSWORD'),
-#         'HOST': config('DATABASE_HOST'),
-#         'PORT': config('DATABASE_PORT'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
 
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
+    }
+}
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation settings
@@ -148,29 +148,29 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom user model
 AUTH_USER_MODEL = "userauths.User"
 
-# AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
-# AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-# AWS_STORAGE_BUCKET_NAME='mangoyi-images'
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME='mangoyi-images'
 
-# AWS_S3_FILE_OVERWRITE = False
+AWS_S3_FILE_OVERWRITE = False
 
-# AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = None
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
-# AWS_LOCATION = 'static'
+AWS_LOCATION = 'static'
 
-# STATIC_LOCATION = 'static'
+STATIC_LOCATION = 'static'
 
-# STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 
 # CSRF Trusted Origins
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://banksystem-production.up.railway.app"
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://banksystem-production.up.railway.app"
+]
