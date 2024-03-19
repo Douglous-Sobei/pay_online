@@ -46,7 +46,7 @@ def withdraw_fund(request, card_id):
             Notification.objects.create(
                 user=request.user,
                 amount=amount,
-                notification_type="Withdrew Credit Card Funds"
+                notification_type="Withdrew Credit Card Funds",
             )
 
             messages.success(request, "Withdrawal Successfull")
@@ -71,16 +71,14 @@ def delete_card(request, card_id):
         account.save()
 
         Notification.objects.create(
-            user=request.user,
-            notification_type="Deleted Credit Card"
+            user=request.user, notification_type="Deleted Credit Card"
         )
 
         credit_card.delete()
         messages.success(request, "Card Deleted Successfull")
         return redirect("account:dashboard")
     Notification.objects.create(
-        user=request.user,
-        notification_type="Deleted Credit Card"
+        user=request.user, notification_type="Deleted Credit Card"
     )
     credit_card.delete()
     messages.success(request, "Card Deleted Successfull")
@@ -102,9 +100,7 @@ def fund_credit_card(request, card_id):
             credit_card.save()
 
             Notification.objects.create(
-                amount=amount,
-                user=request.user,
-                notification_type="Funded Credit Card"
+                amount=amount, user=request.user, notification_type="Funded Credit Card"
             )
 
             messages.success(request, "Funding Successfull")

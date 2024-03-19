@@ -8,26 +8,18 @@ from django.db.models.signals import post_save
 ACCOUNT_STATUS = (
     ("active", "Active"),
     ("pending", "Pending"),
-    ("in-active", "In-active")
+    ("in-active", "In-active"),
 )
 
-MARITAL_STATUS = (
-    ("married", "Married"),
-    ("single", "Single"),
-    ("other", "Other")
-)
+MARITAL_STATUS = (("married", "Married"), ("single", "Single"), ("other", "Other"))
 
-GENDER = (
-    ("male", "Male"),
-    ("female", "Female"),
-    ("other", "Other")
-)
+GENDER = (("male", "Male"), ("female", "Female"), ("other", "Other"))
 
 
 IDENTITY_TYPE = (
     ("national_id_card", "National ID Card"),
     ("drivers_licence", "Drives Licence"),
-    ("international_passport", "International Passport")
+    ("international_passport", "International Passport"),
 )
 
 
@@ -38,42 +30,55 @@ def user_directory_path(instance, filename):
 
 
 class Account(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True,
-                          default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True, unique=True, default=uuid.uuid4, editable=False
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account_balance = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0.00)  # 123 345 789 102
+        max_digits=12, decimal_places=2, default=0.00
+    )  # 123 345 789 102
     account_number = ShortUUIDField(
-        unique=True, length=10, max_length=25, prefix="217", alphabet="1234567890")  # 2175893745837
-    account_id = ShortUUIDField(unique=True, length=7, max_length=25,
-                                prefix="DEX", alphabet="1234567890")  # 2175893745837
+        unique=True, length=10, max_length=25, prefix="217", alphabet="1234567890"
+    )  # 2175893745837
+    account_id = ShortUUIDField(
+        unique=True, length=7, max_length=25, prefix="DEX", alphabet="1234567890"
+    )  # 2175893745837
     pin_number = ShortUUIDField(
-        unique=True, length=4, max_length=7, alphabet="1234567890")  # 2737
+        unique=True, length=4, max_length=7, alphabet="1234567890"
+    )  # 2737
     red_code = ShortUUIDField(
-        unique=True, length=10, max_length=20, alphabet="abcdefgh1234567890")  # 2737
+        unique=True, length=10, max_length=20, alphabet="abcdefgh1234567890"
+    )  # 2737
     account_status = models.CharField(
-        max_length=100, choices=ACCOUNT_STATUS, default="in-active")
+        max_length=100, choices=ACCOUNT_STATUS, default="in-active"
+    )
     date = models.DateTimeField(auto_now_add=True)
     kyc_submitted = models.BooleanField(default=False)
     kyc_confirmed = models.BooleanField(default=False)
     recommended_by = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, blank=True, null=True, related_name="recommended_by")
-    review = models.CharField(
-        max_length=100, null=True, blank=True, default="Review")
+        User,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name="recommended_by",
+    )
+    review = models.CharField(max_length=100, null=True, blank=True, default="Review")
 
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]
 
     def __str__(self):
         return f"{self.user}"
 
 
 class KYC(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True,
-                          default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True, unique=True, default=uuid.uuid4, editable=False
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account = models.OneToOneField(
-        Account, on_delete=models.CASCADE, null=True, blank=True)
+        Account, on_delete=models.CASCADE, null=True, blank=True
+    )
     full_name = models.CharField(max_length=1000)
     image = models.ImageField(upload_to="kyc", default="default.jpg")
     marrital_status = models.CharField(choices=MARITAL_STATUS, max_length=40)
@@ -97,7 +102,7 @@ class KYC(models.Model):
         return f"{self.user}"
 
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]
 
 
 def create_account(sender, instance, created, **kwargs):

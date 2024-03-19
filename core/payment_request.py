@@ -15,9 +15,7 @@ def SearchUsersRequest(request):
 
     if query:
         account = account.filter(
-            Q(account_number=query) |
-            Q(account_id=query)
-
+            Q(account_number=query) | Q(account_id=query)
         ).distinct()
 
     context = {
@@ -52,19 +50,18 @@ def AmountRequestProcess(request, account_number):
             user=request.user,
             amount=amount,
             description=description,
-
             sender=sender,
             reciever=reciever,
-
             sender_account=sender_account,
             reciever_account=reciever_account,
-
             status="request_processing",
-            transaction_type="request"
+            transaction_type="request",
         )
         new_request.save()
         transaction_id = new_request.transaction_id
-        return redirect("core:amount-request-confirmation", account.account_number, transaction_id)
+        return redirect(
+            "core:amount-request-confirmation", account.account_number, transaction_id
+        )
     else:
         messages.warning(request, "Error Occured, try again later.")
         return redirect("account:dashboard")
@@ -95,18 +92,22 @@ def AmountRequestFinalProcess(request, account_number, transaction_id):
                 user=account.user,
                 notification_type="Recieved Payment Request",
                 amount=transaction.amount,
-
             )
 
             Notification.objects.create(
                 user=request.user,
                 amount=transaction.amount,
-                notification_type="Sent Payment Request"
+                notification_type="Sent Payment Request",
             )
 
             messages.success(
-                request, "Your payment request have been sent successfully.")
-            return redirect("core:amount-request-completed", account.account_number, transaction.transaction_id)
+                request, "Your payment request have been sent successfully."
+            )
+            return redirect(
+                "core:amount-request-completed",
+                account.account_number,
+                transaction.transaction_id,
+            )
     else:
         messages.warning(request, "An Error Occured, try again later.")
         return redirect("account:dashboard")
@@ -145,9 +146,13 @@ def settlement_processing(request, account_number, transaction_id):
     if request.method == "POST":
         pin_number = request.POST.get("pin-number")
         if pin_number == request.user.account.pin_number:
-            if sender_account.account_balance <= 0 or sender_account.account_balance < transaction.amount:
+            if (
+                sender_account.account_balance <= 0
+                or sender_account.account_balance < transaction.amount
+            ):
                 messages.warning(
-                    request, "Insufficient Funds, fund your account and try again.")
+                    request, "Insufficient Funds, fund your account and try again."
+                )
             else:
                 sender_account.account_balance -= transaction.amount
                 sender_account.save()
@@ -159,12 +164,21 @@ def settlement_processing(request, account_number, transaction_id):
                 transaction.save()
 
                 messages.success(
-                    request, f"Settled to {account.user.kyc.full_name} was successfull.")
-                return redirect("core:settlement-completed", account.account_number, transaction.transaction_id)
+                    request, f"Settled to {account.user.kyc.full_name} was successfull."
+                )
+                return redirect(
+                    "core:settlement-completed",
+                    account.account_number,
+                    transaction.transaction_id,
+                )
 
         else:
             messages.warning(request, "Incorrect Pin")
-            return redirect("core:settlement-confirmation", account.account_number, transaction.transaction_id)
+            return redirect(
+                "core:settlement-confirmation",
+                account.account_number,
+                transaction.transaction_id,
+            )
     else:
         messages.warning(request, "Error Occured")
         return redirect("account:dashboard")

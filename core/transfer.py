@@ -15,8 +15,7 @@ def search_users_account_number(request):
 
     if query:
         account = account.filter(
-            Q(account_number=query) |
-            Q(account_id=query)
+            Q(account_number=query) | Q(account_id=query)
         ).distinct()
 
     context = {
@@ -65,13 +64,15 @@ def AmountTransferProcess(request, account_number):
                 sender_account=sender_account,
                 reciever_account=reciever_account,
                 status="processing",
-                transaction_type="transfer"
+                transaction_type="transfer",
             )
             new_transaction.save()
 
             # Get the id of the transaction that vas created nov
             transaction_id = new_transaction.transaction_id
-            return redirect("core:transfer-confirmation", account.account_number, transaction_id)
+            return redirect(
+                "core:transfer-confirmation", account.account_number, transaction_id
+            )
         else:
             messages.warning(request, "Insufficient Fund.")
             return redirect("core:amount-transfer", account.account_number)
@@ -87,10 +88,7 @@ def TransferConfirmation(request, account_number, transaction_id):
     except:
         messages.warning(request, "Transaction does not exist.")
         return redirect("account:account")
-    context = {
-        "account": account,
-        "transaction": transaction
-    }
+    context = {"account": account, "transaction": transaction}
     return render(request, "transfer/transfer-confirmation.html", context)
 
 
@@ -126,23 +124,29 @@ def TransferProcess(request, account_number, transaction_id):
             Notification.objects.create(
                 amount=transaction.amount,
                 user=account.user,
-                notification_type="Credit Alert"
+                notification_type="Credit Alert",
             )
 
             Notification.objects.create(
-                user=sender,
-                notification_type="Debit Alert",
-                amount=transaction.amount
+                user=sender, notification_type="Debit Alert", amount=transaction.amount
             )
 
             messages.success(request, "Transfer Successfull.")
-            return redirect("core:transfer-completed", account.account_number, transaction.transaction_id)
+            return redirect(
+                "core:transfer-completed",
+                account.account_number,
+                transaction.transaction_id,
+            )
         else:
             messages.warning(request, "Incorrect Pin.")
-            return redirect('core:transfer-confirmation', account.account_number, transaction.transaction_id)
+            return redirect(
+                "core:transfer-confirmation",
+                account.account_number,
+                transaction.transaction_id,
+            )
     else:
         messages.warning(request, "An error occured, Try again later.")
-        return redirect('account:account')
+        return redirect("account:account")
 
 
 def TransferCompleted(request, account_number, transaction_id):
@@ -152,8 +156,5 @@ def TransferCompleted(request, account_number, transaction_id):
     except:
         messages.warning(request, "Transfer does not exist.")
         return redirect("account:account")
-    context = {
-        "account": account,
-        "transaction": transaction
-    }
+    context = {"account": account, "transaction": transaction}
     return render(request, "transfer/transfer-completed.html", context)
