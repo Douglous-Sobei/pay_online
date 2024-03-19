@@ -1,9 +1,9 @@
-# Backsystem: Payment Backend Logic and Setup Guide
+# Banksystem: Payment Backend Logic and Setup Guide
 
 Welcome to Backsystem! This Django-based payment backend system is designed to facilitate various payment operations and transactions. This README provides a comprehensive guide on setting up the project, configuring its components, and utilizing its functionalities.
 
 ## Project Structure
-- **backsystem**: Django project directory containing project-wide settings and configurations.
+- **banksystem**: Django project directory containing project-wide settings and configurations.
 - **core**: Django app for core functionalities and utilities.
 - **userauths**: Django app for user authentication and management.
 - **account**: Django app for managing user accounts, transactions, and payment-related functionalities.
